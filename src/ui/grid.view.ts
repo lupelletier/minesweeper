@@ -1,4 +1,5 @@
 
+import { Icon } from "../facades/icon.js";
 import { Cell } from "../logic/entities/cell.js";
 import { Grid } from "../logic/entities/grid.js";
 import { Game } from "../logic/game.js";
@@ -38,7 +39,7 @@ export class GridView {
                 const cell = this.grid.cells[y][x];
                 const htmlCell = document.createElement('li');
                 htmlCell.classList.add('ground_cell', 'mask');
-                htmlCell.innerHTML = cell.icon ? cell.icon : '';
+                htmlCell.innerHTML = Icon.of(cell)
                 htmlCell.onclick = () => Game.INSTANCE.play(cell);
                 htmlCells.appendChild(htmlCell);
                 this.cells[y].push(htmlCell);
@@ -47,7 +48,7 @@ export class GridView {
 
         // Abonnement aux slots de notifications
         Game.INSTANCE.onHit.listen(cell => this.cells[cell.y][cell.x].classList.remove('mask'));
-        Game.INSTANCE.onHelp.listen(e => this.cells[e.cell.y][e.cell.x].innerHTML = e.hint);
+        Game.INSTANCE.onChange.listen(cell => this.cells[cell.y][cell.x].innerHTML = Icon.of(cell));
     
         // Insertion du tableau dans la page
         htmlMain?.appendChild(htmlGrid);

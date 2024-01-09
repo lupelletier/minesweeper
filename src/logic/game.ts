@@ -9,8 +9,8 @@ export class Game{
 
     // Slots de notifications 
     onHit = new Subject<Cell>();
-    onHelp = new Subject<{cell: Cell, hint: string}>();
-
+    // onHelp = new Subject<{cell: Cell, hint: string}>();
+    onChange = new Subject<Cell>();
 
     // Démarrage du jeu
     // Ne fait rien pour l'instant, mais va devenir utile par la suite
@@ -30,7 +30,7 @@ export class Game{
         }else{
             let n = cell.risk;
             let hint = cell.ground && n>=1 ? `${n}` : cell.icon;
-            this.onHelp.raise({cell, hint});
+            this.onChange.raise(cell);
             let grid = cell.grid;
             console.log(grid.remaining);
             if(grid.remaining == 0){

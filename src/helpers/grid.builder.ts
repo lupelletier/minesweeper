@@ -1,8 +1,8 @@
-import { CellBomb } from "../logic/entities/cell-bomb.js";
-import { CellRabbit } from "../logic/entities/cell-rabbit.js";
 import { Cell } from "../logic/entities/cell.js";
 import { Grid } from "../logic/entities/grid.js";
-import { EItem } from "../logic/enums/e-items.js";
+import { ItemBomb } from "../logic/entities/item-bomb.js";
+import { ItemRabbit } from "../logic/entities/item-rabbit.js";
+import { EItem } from "../logic/enums/e-item.js";
 
 export class GridBuilder {
     grid: Grid;
@@ -18,7 +18,6 @@ export class GridBuilder {
         this.height = height;
         this.density = density;
         this.rabbits = rabbits;
-
     }
 
     build(): Cell[][] {
@@ -46,7 +45,6 @@ export class GridBuilder {
             vector[i] = b;
             vector[j] = a;
         }
-
         // On transfére le tableau dans la grille
         // rows est un tableau de cellules (Cell[][])
         const rows: Cell[][] = [];
@@ -54,19 +52,15 @@ export class GridBuilder {
             let row = [] as Cell[];
             for (let x = 0; x < this.width; x++) {
                 const bomb = vector[y * this.width + x];
-                // On ajoute des bombes (exactement 10% de bombs)
-                if (bomb){
-                    row.push(new CellBomb(this.grid, x, y));
-                    continue;  
-                }
+                const cell = new Cell(this.grid, x, y);
                 // On ajoute des lapins (probabilité de rabbits = 0.03 )
                 const rabbit = Math.random() < this.rabbits ? EItem.Rabbit : EItem.Ground;
-                if (rabbit){
-                    row.push(new CellRabbit(this.grid, x, y));
-                    console.log('rabbit added');
-                    continue;
-                }
-                row.push(new Cell(this.grid, x, y));
+                if (rabbit)
+                    cell.item = new ItemRabbit();
+                // On ajoute des bombes (exactement 10% de bombs)
+                if (bomb)
+                    cell.item = new ItemBomb();  
+                row.push(cell);
             }
             rows.push(row);
         }
