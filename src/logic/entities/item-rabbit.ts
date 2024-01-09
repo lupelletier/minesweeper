@@ -23,9 +23,11 @@ export class ItemRabbit extends Item {
         const grid = cell.grid;
         const moves: Cell[] = [];
         grid.explore(cell, near => {
-            if (!near.ground)
+            if (!near.bomb)
                 moves.push(near);
         });
+        if (moves.length == 0)
+            return;
 
         // Déplacer le lapin
         const i = Math.floor(Math.random() * moves.length);
