@@ -1,5 +1,6 @@
 import { EIcon } from "../enums/e-icon.js";
 import { EItem } from "../enums/e-item.js";
+import { Game } from "../game.js";
 import { Grid } from "./grid.js";
 import { Item } from "./item.js";
 
@@ -25,6 +26,7 @@ export class Cell {
         this.grid = grid;
         this.x = x;
         this.y = y;
+        Game.INSTANCE.onTic.listen(() => this.item?.wakeUp(this));
     }
 
     // Ajuste et affiche le risque de tomber sur une bombe on découvrant cette cellule et ses voisines 

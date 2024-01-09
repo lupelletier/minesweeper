@@ -9,13 +9,15 @@ export class Game{
 
     // Slots de notifications 
     onHit = new Subject<Cell>();
-    // onHelp = new Subject<{cell: Cell, hint: string}>();
     onChange = new Subject<Cell>();
+    onTic = new Subject<void>();
 
     // Démarrage du jeu
     // Ne fait rien pour l'instant, mais va devenir utile par la suite
     // ex : démarrer un timer, initialliser un score, etc.
-    start(){}
+    start(){
+        setInterval(() => this.onTic.raise(), 1000);
+    }
 
     // Gestion d'un clic sur une cellule
     play(cell: Cell) {
