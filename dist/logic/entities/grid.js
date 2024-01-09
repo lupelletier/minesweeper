@@ -1,4 +1,4 @@
-import { Cell } from "./cell.js";
+import { GridBuilder } from "../../helpers/grid.builder.js";
 export class Grid {
     // Nombre de cellules saines non découvertes
     get remaining() {
@@ -9,20 +9,14 @@ export class Grid {
                     n += 1;
         return n;
     }
-    // Création d'une grille
-    constructor(width, height, density) {
+    constructor(width, height, density, rabbitsProbability) {
         this.cells = [];
         this.width = width;
         this.height = height;
-        this.density = density;
-        for (let y = 0; y < this.height; y++) {
-            this.cells.push([]);
-            for (let x = 0; x < this.width; x++) {
-                const bomb = Math.random() < this.density;
-                const cell = new Cell(this, x, y, bomb);
-                this.cells[y].push(cell);
-            }
-        }
+        // Utilisation du builder pour créer la grille avec les cellules remplies 
+        const builder = new GridBuilder(this, width, height, density, rabbitsProbability);
+        // Création de la grille remplie de bombes (nombre exact) et de lapins (probabilité)
+        this.cells = builder.build();
     }
     // Explore le voisinage d'une cellule
     explore(cell, visit) {
@@ -31,7 +25,7 @@ export class Grid {
         const ymin = Math.max(cell.y - 1, 0);
         const ymax = Math.min(cell.y + 1, this.height - 1);
         for (let x = xmin; x <= xmax; x++)
-            for (let y = ymin; y < ymax; y++)
+            for (let y = ymin; y <= ymax; y++)
                 if (x != cell.x || y != cell.y)
                     visit(this.cells[y][x]);
     }
